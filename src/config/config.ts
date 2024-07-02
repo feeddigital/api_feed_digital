@@ -4,7 +4,8 @@ const ENV = process.argv.slice(2)[0];
 
 console.log(ENV);
 
-dotenv.config({ path: ENV === "prod" ? "./.env.prod" : "./.env.dev" });
+//dotenv.config({ path: ENV === "prod" ? "./.env.prod" : "./.env.dev" });
+dotenv.config()
 
 export default {
   PORT: process.env.PORT || 8080,
