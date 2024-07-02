@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import * as service from "../services/user.services";
 import { HttpResponse } from "../utils/http.response";
+import { generateToken } from "../middlewares/jwt";
 const httpResponse = new HttpResponse();
 
 export const register = async (
@@ -12,6 +13,22 @@ export const register = async (
     const newUser = await service.register(req.body);
     if (!newUser) return httpResponse.NotFound(res, "Validation error!");
     else return httpResponse.Ok(res, newUser);
+  } catch (error: unknown) {
+    next((error as Error).message);
+  }
+};
+
+export const login = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const user = await service.login(req.body);
+    if (!user) return httpResponse.NotFound(res, "User Not Found");
+    const token = generateToken(user);
+    res.cookie('token', token, { httpOnly: true });
+    return httpResponse.Ok(res, user);
   } catch (error: unknown) {
     next((error as Error).message);
   }

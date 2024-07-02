@@ -1,6 +1,6 @@
 import { User } from "../types/User";
 import { UserModel } from "../models/user.model";
-import { createHash } from "../utils/bcrypt";
+import { createHash, isValidPassword } from "../utils/bcrypt";
 import { createTransport } from "nodemailer";
 import "dotenv/config";
 
@@ -29,6 +29,20 @@ export const register = async (user: User): Promise<User | null> => {
     };
     await transporter.sendMail(gmailOptions);
     return newUser;
+  } catch (error: unknown) {
+    throw new Error((error as Error).message);
+  }
+};
+
+export const login = async (user: User): Promise<User | null> => {
+  try {
+    const { email, password } = user;
+    const userExist = await getByEmail(email);
+    // console.log(userExist);
+    if (!userExist) return null;
+    const passValid = isValidPassword(userExist, password);
+    if (!passValid) return null;
+    return userExist;
   } catch (error: unknown) {
     throw new Error((error as Error).message);
   }
