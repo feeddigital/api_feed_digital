@@ -6,7 +6,9 @@
   "scripts": {
     "build": "tsc",
     "start": "node .",
-    "dev": "nodemon ./src/server.ts"
+    "dev": "nodemon ./src/server.ts",
+    "start:prod": "node . prod",
+    "start:dev": "node . dev"
   },
   "keywords": [],
   "author": "",
