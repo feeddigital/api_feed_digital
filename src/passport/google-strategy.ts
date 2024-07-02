@@ -3,11 +3,12 @@ import { Strategy as googleStrategy } from 'passport-google-oauth20';
 import passport from 'passport';
 import 'dotenv/config';
 import { UserType } from '../types/User';
+import config from '../config/config';
 
 const strategyConfig = {
-    clientID: process.env.CLIENT_ID_GOOGLE || '',
-    clientSecret: process.env.CLIENT_SECRET_GOOGLE || '',
-    callbackURL: process.env.ENV === "prod" ? process.env.CALLBACK_URL_GOOGLE_PROD : process.env.CALLBACK_URL_GOOGLE,
+    clientID: config.CLIENT_ID_GOOGLE || '',
+    clientSecret: config.CLIENT_SECRET_GOOGLE || '',
+    callbackURL: config.CALLBACK_URL_GOOGLE,
     scope: ['profile', 'email'],
     state: true,
 };

@@ -4,18 +4,19 @@ import "dotenv/config";
 import { User } from "../types/User";
 import { NextFunction, Request, Response } from "express";
 import { Payload } from "../types/Payload";
+import config from "../config/config";
 
 export const generateToken = (user: User, time: string = "5m") => {
   const payload = { userId: user?._id };
 
-  return jwt.sign(payload, process.env.SECRET_KEY || '', { expiresIn: time });
+  return jwt.sign(payload, config.SECRET_KEY || '', { expiresIn: time });
 };
 
 export const checkAuth = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const token = req.cookies.token
     if (!token) res.status(401).json({ msg: "Unhautorized" });
-    const decode: Payload | any = jwt.verify(token, process.env.SECRET_KEY || '');
+    const decode: Payload | any = jwt.verify(token, config.SECRET_KEY || '');
     const user = await services.getById(decode?.userId);
     if (!user) res.status(404).json({ msg: "User not found" });
     //REFRESH TOKEN
