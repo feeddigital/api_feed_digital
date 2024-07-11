@@ -6,12 +6,18 @@ import session from "express-session";
 import { dbConnection, storeConfig } from './config/db.connection';
 import { errorHandler } from './middlewares/error.handler';
 import apiRouter from './routes/index';
+import cors from 'cors';
 
 import config from './config/config';
 
 const app = express();
 
 app.use(express.json());
+app.use(cors({
+    origin: 'http://localhost:5173',   
+    methods: 'GET,POST,PUT,DELETE', 
+    allowedHeaders: 'Content-Type,Authorization' 
+}));
 
 const PORT = process.env.PORT || 8080;
 

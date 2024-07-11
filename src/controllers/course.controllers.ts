@@ -1,6 +1,8 @@
 import { NextFunction, Request, Response } from "express";
 import * as service from "../services/course.services";
 import { HttpResponse } from "../utils/http.response";
+import { preference } from "../services/mercadopago.service";
+import { PreferenceRequest } from "mercadopago/dist/clients/preference/commonTypes";
 const httpResponse = new HttpResponse();
 
 export const create = async (
@@ -30,7 +32,10 @@ export const addStudentToCourse = async (
       studentId
     );
     if (!newStudentInCourse)
-      return httpResponse.NotFound(res, "Error add student to course, user exist in course | user/course not found");
+      return httpResponse.NotFound(
+        res,
+        "Error add student to course, user exist in course | user/course not found"
+      );
     return httpResponse.Ok(res, newStudentInCourse);
   } catch (error: unknown) {
     next((error as Error).message);
@@ -38,23 +43,46 @@ export const addStudentToCourse = async (
 };
 
 export const payCourseOk = async (
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ) => {
-    try {
-      const { courseId } = req.params;
-      const { studentId } = req.params;
-      const confirmPay = await service.payCourseOk(
-        courseId,
-        studentId
-      );
-      if (!confirmPay) return httpResponse.NotFound(res, "Error confimation pay of student");
-      return httpResponse.Ok(res, confirmPay);
-    } catch (error: unknown) {
-      next((error as Error).message);
-    }
-  };
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { courseId } = req.params;
+    const { studentId } = req.params;
+
+    const course = await service.getById(courseId);
+
+    const body: PreferenceRequest = {
+      items: [
+        {
+          id: course?._id || '',
+          description: course?.description,
+          picture_url: course?.image,
+          title: course?.name || '',
+          quantity: 1,
+          unit_price: course?.price || 0,
+          currency_id: "ARS",
+        },
+      ],
+      back_urls: {
+        success: "http://localhost:3000",
+        failure: "http://localhost:8080/failure",
+        pending: "http://localhost:8080/failure",
+      },
+      auto_return: "approved",
+    };
+    const responseMP = await preference.create({ body });
+    // res.json(responseMP);
+
+    const confirmPay = await service.payCourseOk(courseId, studentId);
+    if (!confirmPay)
+      return httpResponse.NotFound(res, "Error confimation pay of student");
+    return httpResponse.Ok(res, { payCourse: confirmPay, responseMP: responseMP });
+  } catch (error: unknown) {
+    next((error as Error).message);
+  }
+};
 
 export const getAll = async (
   _req: Request,

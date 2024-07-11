@@ -27,6 +27,7 @@ const CourseSchema = new Schema<Course>({
     }
   ],
   active: { type: Boolean },
+  price: { type: Number, required: true }
 });
 
 export const CourseModel = model("course", CourseSchema);
