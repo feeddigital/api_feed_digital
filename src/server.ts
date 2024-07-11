@@ -14,7 +14,7 @@ const app = express();
 
 app.use(express.json());
 app.use(cors({
-    origin: 'https://668f5964d5584dc6dfffa077--eloquent-pony-d86c5d.netlify.app/',   
+    origin: 'https://front-feed-digital.onrender.com',   
     methods: 'GET,POST,PUT,DELETE,OPTIONS', 
     allowedHeaders: 'Content-Type,Authorization',
     credentials: true 
