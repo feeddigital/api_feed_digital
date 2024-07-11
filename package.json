@@ -5,7 +5,7 @@
   "main": "./dist/src/server.js",
   "scripts": {
     "build": "tsc",
-    "start": "node .",
+    "start": "node . prod",
     "dev": "nodemon ./src/server.ts",
     "start:prod": "node . prod",
     "start:dev": "node . dev"
