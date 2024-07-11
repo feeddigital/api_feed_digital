@@ -4,7 +4,7 @@ const ENV = process.argv.slice(2)[0];
 
 console.log(ENV);
 
-//dotenv.config({ path: ENV === "prod" ? "./.env.prod" : "./.env.dev" });
+// dotenv.config({ path: ENV === "prod" ? "./.env.prod" : "./.env.dev" });
 dotenv.config()
 
 export default {
@@ -17,4 +17,5 @@ export default {
   CLIENT_ID_GOOGLE: process.env.CLIENT_ID_GOOGLE || "",
   CLIENT_SECRET_GOOGLE: process.env.CLIENT_SECRET_GOOGLE || "",
   CALLBACK_URL_GOOGLE: process.env.CALLBACK_URL_GOOGLE || "",
+  ACCESS_TOKEN_MP: process.env.ACCESS_TOKEN_MP || "",
 };

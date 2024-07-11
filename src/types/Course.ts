@@ -1,4 +1,5 @@
 export interface Course {
+  _id?: string;
   name: string;
   description: string;
   code: string;
@@ -15,4 +16,5 @@ export interface Course {
   hoursOfClases: string[];
   inscripts: any[];
   active: boolean;
+  price: number;
 }
