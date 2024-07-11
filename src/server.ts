@@ -49,7 +49,9 @@ app.use(errorHandler);
 app.listen(PORT, ()=>{
     console.log(`Server OK on port: ${PORT}`);
     console.log(`ENVIRONMENT SERVER => ${config.ENV}`)
-})
+});
+
+export default app;
 
 
 
