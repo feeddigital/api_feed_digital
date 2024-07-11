@@ -1,6 +1,7 @@
 import dotenv from "dotenv";
 
-const ENV = process.argv.slice(2)[0];
+// const ENV = process.argv.slice(2)[0];
+const ENV = process.env.ENV
 
 console.log(ENV);
 
