@@ -41,6 +41,7 @@ app.use(session(storeConfig));
 app.use(passport.initialize());
 app.use(passport.session());
 
+app.get("/", (req, res) => res.send("Server OK"));
 app.use('/api', apiRouter);
 
 app.use(errorHandler); 
