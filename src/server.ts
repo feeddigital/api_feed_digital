@@ -35,6 +35,7 @@ const PORT = process.env.PORT || 8080;
 
 dbConnection().then(() => console.log('Connect to MongoDB')).catch((error)=>console.log(error));
 
+app.use(express.static('public'));
 app.use(cookieParser());
 app.use(session(storeConfig));
 
