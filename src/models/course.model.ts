@@ -4,7 +4,7 @@ import { Course } from "../types/Course";
 const CourseSchema = new Schema<Course>({
   name: { type: String },
   description: { type: String },
-  code: { type: String },
+  classroom: { type: String },
   startDate: { 
     date: { type: String },
     description: { type: String },

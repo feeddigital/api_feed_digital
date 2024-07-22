@@ -9,7 +9,8 @@ const userSchema = new Schema<User>({
   password: { type: String, required: true },
   image: { type: String },
   type: { type: String, enum: ['ADMIN', 'STUDENT', 'TEACHER'], required: true },
-  active: { type: Boolean, default: true }
+  active: { type: Boolean, default: true },
+  courseOfInterest: { type: Schema.Types.ObjectId, ref: 'courses' }
 });
 
 export const UserModel = model("users", userSchema);

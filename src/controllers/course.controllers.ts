@@ -2,7 +2,8 @@ import { NextFunction, Request, Response } from "express";
 import * as service from "../services/course.services";
 import { HttpResponse } from "../utils/http.response";
 import { preference } from "../services/mercadopago.service";
-import { PreferenceRequest } from "mercadopago/dist/clients/preference/commonTypes";
+import { PreferenceRequest, PreferenceResponse } from "mercadopago/dist/clients/preference/commonTypes";
+import config from "../config/config";
 const httpResponse = new HttpResponse();
 
 export const create = async (
@@ -66,19 +67,19 @@ export const payCourseOk = async (
         },
       ],
       back_urls: {
-        success: "http://localhost:3000",
-        failure: "http://localhost:8080/failure",
-        pending: "http://localhost:8080/failure",
+        success: `${config.REACT_APP}/pay-success`,
+        failure: `${config.REACT_APP}/pay-failure`,
+        pending: `${config.REACT_APP}/pay-pending`,
       },
       auto_return: "approved",
     };
-    const responseMP = await preference.create({ body });
+    const responseMP: PreferenceResponse = await preference.create({ body });
     // res.json(responseMP);
-
-    const confirmPay = await service.payCourseOk(courseId, studentId);
-    if (!confirmPay)
-      return httpResponse.NotFound(res, "Error confimation pay of student");
-    return httpResponse.Ok(res, { payCourse: confirmPay, responseMP: responseMP });
+    if(responseMP.id ) {
+      const confirmPay = await service.payCourseOk(courseId, studentId);
+      if (!confirmPay) return httpResponse.NotFound(res, "Error confimation pay of student");
+      return httpResponse.Ok(res, { payCourse: confirmPay, responseMP: responseMP });
+    } else return httpResponse.NotFound(res, responseMP);
   } catch (error: unknown) {
     next((error as Error).message);
   }

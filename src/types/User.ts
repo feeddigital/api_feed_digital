@@ -14,4 +14,5 @@ export interface User {
     image: string;
     type: UserType; 
     active: boolean;
+    courseOfInterest: any;
 }

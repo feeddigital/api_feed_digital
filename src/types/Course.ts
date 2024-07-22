@@ -2,7 +2,7 @@ export interface Course {
   _id?: string;
   name: string;
   description: string;
-  code: string;
+  classroom: string;
   startDate: {
     date: string;
     description: string;

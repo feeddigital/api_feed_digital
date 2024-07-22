@@ -30,7 +30,8 @@ const registerOrLogin = async(accessToken: any, refreshToken: any, profile: any,
             password: ' ',
             image: profile._json.picture,
             type: UserType.Student,
-            active: true
+            active: true,
+            courseOfInterest: ''
         });
         return done(null, newUser);
     } catch (error) {

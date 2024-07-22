@@ -1,10 +1,14 @@
 import { Course } from "../types/Course";
 import { CourseModel } from "../models/course.model";
 import { getById as getUserById } from "./user.services";
+import { v4 as uuidv4 } from 'uuid';
 
 export const create = async (course: Course): Promise<Course | null> => {
   try {
-    return await CourseModel.create(course);
+    return await CourseModel.create({
+      ...course,
+      classroom: uuidv4()
+    });
   } catch (error: unknown) {
     throw new Error((error as Error).message);
   }
@@ -24,6 +28,13 @@ export const existStudentInCourse = async (
   }
 };
 
+/**
+ * Agrega el estudiante al curso, con la marca pay en false, ésta propiedad será modificada, una vez
+ * que se confirme el pago
+ * @param courseId 
+ * @param studentId 
+ * @returns course
+ */
 export const addStudentToCourse = async (
   courseId: string,
   studentId: string

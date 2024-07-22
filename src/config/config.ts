@@ -5,8 +5,8 @@ const ENV = process.env.ENV
 
 console.log(ENV);
 
-// dotenv.config({ path: ENV === "prod" ? "./.env.prod" : "./.env.dev" });
-dotenv.config()
+dotenv.config({ path: ENV === "prod" ? "./.env.prod" : "./.env.dev" });
+// dotenv.config()
 
 export default {
   PORT: process.env.PORT || 8080,
@@ -19,4 +19,5 @@ export default {
   CLIENT_SECRET_GOOGLE: process.env.CLIENT_SECRET_GOOGLE || "",
   CALLBACK_URL_GOOGLE: process.env.CALLBACK_URL_GOOGLE || "",
   ACCESS_TOKEN_MP: process.env.ACCESS_TOKEN_MP || "",
+  REACT_APP: process.env.REACT_APP || "http://localhost:5173",
 };

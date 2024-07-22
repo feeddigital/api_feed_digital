@@ -3,6 +3,7 @@ import { UserModel } from "../models/user.model";
 import { createHash, isValidPassword } from "../utils/bcrypt";
 import { createTransport } from "nodemailer";
 import "dotenv/config";
+import { addStudentToCourse, getById as getCourseById } from "./course.services";
 
 const transporter = createTransport({
   service: "gmail",
@@ -16,16 +17,26 @@ const transporter = createTransport({
 
 export const register = async (user: User): Promise<User | null> => {
   try {
-    const { email, firstname } = user;
+    const { email, firstname, courseOfInterest } = user;
     const newUser = await UserModel.create({
       ...user,
       password: createHash(user?.password),
     });
+    if(courseOfInterest !== ""){
+      await addStudentToCourse(courseOfInterest, newUser._id)
+    }
+    const course = await getCourseById(courseOfInterest);
+    const msgInt = course ? `<h3>Estás pre-inscripto/a en el ${course?.description} - Aula: ${course?.classroom}</h3>
+    <br>
+    <h3>Hacé click en este botón para completar tu pago <a href="https://front-feed-digital.vercel.app">Completar pago</a></h3>
+    ` : '';
     const gmailOptions = {
       from: process.env.EMAIL,
       to: email,
       subject: "Bienvenida/o a Feed Digital | Cursos de programación",
-      html: `<h1>Hola ${firstname}, ¡Te damos la Bienvenida a Feed Digital!</h1>`,
+      html: `<h1>Hola ${firstname}, ¡Te damos la Bienvenida a Feed Digital!</h1>
+      <br/>
+      ${msgInt}`,
     };
     await transporter.sendMail(gmailOptions);
     return newUser;
